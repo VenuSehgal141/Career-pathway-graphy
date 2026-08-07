@@ -44,6 +44,12 @@ DEMO_GAPS = [
     {"skill": "Docker", "category": "Cloud", "importance": 4},
 ]
 
+DEMO_REQUIREMENTS = [
+    {"skill": "Python", "category": "Programming", "importance": 5},
+    {"skill": "Machine Learning Fundamentals", "category": "ML", "importance": 5},
+    {"skill": "Deep Learning", "category": "ML", "importance": 4},
+]
+
 
 def _safe_query(cypher: str, parameters: dict | None = None):
     try:
@@ -74,7 +80,10 @@ def role_requirements(role_title: str):
     RETURN s.name AS skill, s.category AS category, req.importance AS importance
     ORDER BY req.importance DESC
     """
-    return run_query(cypher, {"role_title": role_title})
+    try:
+        return run_query(cypher, {"role_title": role_title})
+    except DatabaseUnavailableError:
+        return DEMO_REQUIREMENTS
 
 
 def skill_gap_for_role(person_name: str, role_title: str):
@@ -210,7 +219,11 @@ def most_in_demand_skills():
     try:
         return run_query(cypher)
     except DatabaseUnavailableError:
-        return [{"skill": "Python", "companies_wanting_it": 3}]
+        return [
+            {"skill": "Python", "companies_wanting_it": 3},
+            {"skill": "AWS", "companies_wanting_it": 2},
+            {"skill": "RAG Systems", "companies_wanting_it": 2},
+        ]
 
 
 def all_skills():
