@@ -3,8 +3,9 @@ services:
     name: career-pathway-graph
     env: python
     plan: free
+    region: oregon
     buildCommand: pip install -r requirements.txt
-    startCommand: streamlit run app.py --server.headless true --server.port $PORT
+    startCommand: python -m streamlit run app.py --server.headless true --server.port $PORT --server.address 0.0.0.0
     envVars:
       - key: PYTHON_VERSION
-        value: 3.13.7
+        value: 3.11.9
